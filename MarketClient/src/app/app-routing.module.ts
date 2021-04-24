@@ -4,12 +4,13 @@ import { ContentComponent } from './ContentComponent/Content.component';
 import { LoginComponent } from './LoginComponent/login.component';
 
 const routes: Routes = [
-  {path:'login', component: LoginComponent},
-  {path:'', component: ContentComponent }
+  { path: 'login', component: LoginComponent },
+  { path: '', component: ContentComponent },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

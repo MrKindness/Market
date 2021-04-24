@@ -1,5 +1,9 @@
 .navbar {
   display: flex;
+  align-items: center;
+  background-color: rgb(195, 225, 226);
+  height: 40px;
+  padding: 10px;
 }
 
 .navbar > div{
