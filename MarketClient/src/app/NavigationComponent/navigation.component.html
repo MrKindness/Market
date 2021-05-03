@@ -1,6 +1,14 @@
 <nav class="navbar">
-      <div><button #HomeButton class="btn" (click)="OpenHome()">Home</button></div>
-      <div><button #LoginButton class="btn" (click)="OpenLogin()">Login</button></div>
-      <div><button class="btn" (click)="LogOut()">Log out</button></div>
-      <div class="AccessLvl" >Access level: admin</div>
+  <div>
+    <button [disabled]="CurrentPage == 0" class="btn" (click)="GoHome()">
+      Home
+    </button>
+  </div>
+  <div>
+    <button [disabled]="CurrentPage == 1" class="btn" (click)="GoAuth()">
+      Login
+    </button>
+  </div>
+  <div><button class="btn" (click)="LogOut()">Log out</button></div>
+  <div *ngIf="Logged" class="AccessLvl">{{ UserName }} ({{ AccessLvl }})</div>
 </nav>

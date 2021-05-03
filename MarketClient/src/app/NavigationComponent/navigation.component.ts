@@ -1,32 +1,43 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Host,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
+
+enum PageType {
+  Home,
+  Auth,
+}
 
 @Component({
   templateUrl: 'navigation.component.html',
-  selector: 'navigation-component',
+  selector: 'app-navigation-component',
   styleUrls: ['navigation.component.css'],
 })
-export class NavigationComponent {
-  @ViewChild('HomeButton', { static: false }) HomeButton!: ElementRef;
-  @ViewChild('LoginButton', { static: false }) LoginButton!: ElementRef;
+export class NavigationComponent implements AfterViewInit {
+  AccessLvl = 'admin';
+  UserName = 'admin';
+  Logged = false;
+  CurrentPage: PageType = PageType.Home;
 
   constructor(private router: Router) {}
 
-  ngAfterViewInit() {
-    this.HomeButton.nativeElement.disabled = true;
+  ngAfterViewInit(): void {
+    this.GoHome();
   }
 
-  OpenLogin() {
-    this.router.navigate(['/login']);
-    this.HomeButton.nativeElement.disabled = false;
-    this.LoginButton.nativeElement.disabled = true;
+  GoAuth(): void {
+    this.router.navigate(['/auth']);
+    this.CurrentPage = PageType.Auth;
   }
 
-  OpenHome() {
+  GoHome(): void {
     this.router.navigate(['/']);
-    this.HomeButton.nativeElement.disabled = true;
-    this.LoginButton.nativeElement.disabled = false;
+    this.CurrentPage = PageType.Home;
   }
 
-  LogOut() {}
+  LogOut(): void {}
 }
