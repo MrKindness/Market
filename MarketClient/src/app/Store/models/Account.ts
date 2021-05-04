@@ -1,5 +1,6 @@
 export interface Account {
   Login: string;
-  password: string;
-  AccessLevel: number;
+  Password: string;
+  EMail?: string;
+  AccessLevel?: number;
 }

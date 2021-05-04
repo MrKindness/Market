@@ -12,6 +12,10 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { FormsModule } from '@angular/forms';
 
+import { reducers } from './Store/index';
+import { AuthService } from './Services/auth.service';
+import { AuthEffects } from './Store/effects/auth.effect';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,15 +26,15 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot(reducers, {}),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
-    EffectsModule.forRoot([]),
-    FormsModule
+    EffectsModule.forRoot([AuthEffects]),
+    FormsModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
