@@ -5,29 +5,53 @@ import {
   on,
 } from '@ngrx/store';
 import { Account } from '../models/Account';
-import { LogInSuccess } from '../actions/auth.actions';
+import { LogInFailed, LogInSuccess, LogOut } from '../actions/auth.actions';
 
 export interface AccountState {
   account?: Account;
+  Logged: boolean;
 }
 
 export const initialState: AccountState = {
-  account: undefined,
+  account: { Login: '', Password: '', AccessLevel: -1, EMail: '' },
+  Logged: false,
 };
 
 export const AccountReducer = createReducer(
   initialState,
-  on(LogInSuccess, (state) => {
+  on(LogOut, (state) => {
     return {
       ...state,
-      account: state.account,
+      account: initialState.account,
+      Logged: false,
+    };
+  }),
+  on(LogInFailed, (state, ErrorsList: { data: string[] }) => {
+    return state;
+  }),
+  on(LogInSuccess, (state, action: Account) => {
+    return {
+      ...state,
+      account: {
+        Login: action.Login,
+        Password: action.Password,
+        AccessLevel: action.AccessLevel,
+        EMail: action.EMail,
+      },
+      Logged: true,
     };
   })
 );
 
-export const featureSelector = createFeatureSelector<AccountState>('account');
+export const featureSelector = createFeatureSelector<AccountState>('Account');
 
-export const AccountSelector = createSelector(
+export const AccountDataSelector = createSelector(featureSelector, (state) => {
+  return state.account;
+});
+
+export const AccountLoggedSelector = createSelector(
   featureSelector,
-  (state) => state.account
+  (state) => {
+    return state.Logged;
+  }
 );

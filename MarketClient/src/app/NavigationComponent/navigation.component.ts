@@ -1,11 +1,12 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Host,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs/operators';
+import { LogOut } from '../Store/actions/auth.actions';
+import {
+  AccountDataSelector,
+  AccountLoggedSelector,
+} from '../Store/reducers/account.reducer';
 
 enum PageType {
   Home,
@@ -18,12 +19,16 @@ enum PageType {
   styleUrls: ['navigation.component.css'],
 })
 export class NavigationComponent implements AfterViewInit {
-  AccessLvl = 'admin';
-  UserName = 'admin';
-  Logged = false;
   CurrentPage: PageType = PageType.Home;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
+
+  AccountLogged$ = this.store.select(AccountLoggedSelector);
+  AccountData$ = this.store.select(AccountDataSelector).pipe(
+    map((data) => {
+      return data?.Login;
+    })
+  );
 
   ngAfterViewInit(): void {
     this.GoHome();
@@ -39,5 +44,7 @@ export class NavigationComponent implements AfterViewInit {
     this.CurrentPage = PageType.Home;
   }
 
-  LogOut(): void {}
+  LogOut(): void {
+    this.store.dispatch(LogOut());
+  }
 }

@@ -1,28 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { LogIn, LogInSuccess, LogInFailed } from '../actions/auth.actions';
-import { map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/Services/auth.service';
-import { OperationResult } from '../models/OperationResult';
+import { AuthResult } from '../models/AuthResult';
 
 @Injectable()
 export class AuthEffects {
   constructor(private actions$: Actions, private authService: AuthService) {}
 
-  authEffect$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(LogIn),
-        map((event: any) => {
-          const result: OperationResult = this.authService.CheckLogin(event);
+  LoginSuccessEffect$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(LogIn),
+    map((event) => this.authService.CheckLogin(event)),
+    filter((event) => event.success),
+    map((event: AuthResult) => LogInSuccess(event.account!))
+  )
+);
 
-          if (result.success) {
-            LogInSuccess();
-          } else {
-            LogInFailed(result);
-          }
-        })
-      ),
-    { dispatch: false }
-  );
+  // LoginSuccessEffect$ = createEffect(
+  //   () =>
+  //     this.actions$.pipe(
+  //       ofType(LogIn),
+  //       map((event: any) => {
+  //         return this.authService.CheckLogin(event);
+  //       }),
+  //       map((event) => {
+  //         let temp: Account = event.Data;
+  //         if (event.success) {
+  //           console.log(temp);
+  //           LogInSuccess(temp);
+  //         } else {
+  //           LogInFailed(event);
+  //         }
+  //       })
+  //     ),
+  //   { dispatch: false }
+  // );
 }

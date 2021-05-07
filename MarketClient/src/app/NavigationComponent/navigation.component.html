@@ -10,5 +10,5 @@
     </button>
   </div>
   <div><button class="btn" (click)="LogOut()">Log out</button></div>
-  <div *ngIf="Logged" class="AccessLvl">{{ UserName }} ({{ AccessLvl }})</div>
+  <div *ngIf="AccountLogged$ | async">{{AccountData$ | async}}</div>
 </nav>
